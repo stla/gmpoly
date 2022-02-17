@@ -30,6 +30,12 @@ stringToPol <- function(p){
   coeffs[is.na(coeffs)] <- as.bigq(1L)
   powers <- sub(")", "", unlist(ss[[2L]], recursive = FALSE), fixed = TRUE)
   powers <- lapply(strsplit(powers, ","), as.integer)
+  positive <- vapply(powers, function(a){
+    all(a >= 0)
+  }, logical(1L))
+  if(!all(positive)){
+    stop("Negative powers are not allowed.")
+  }
   i <- 1L
   m <- length(powers[[1L]])
   nterms <- length(powers)

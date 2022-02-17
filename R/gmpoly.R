@@ -57,6 +57,7 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
       return(zeroPol(m))
     }
     storage.mode(powers) <- "integer"
+    stopifnot(all(powers >= 0L))
     exponents <- apply(powers, 1L, grlexRank)
     pol <- list(
       "coeffs" = coeffs,
