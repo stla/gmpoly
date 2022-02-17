@@ -76,6 +76,7 @@ polynomialAdd <- function(pol1, pol2){
   if(notCompressed){
     spol <- polynomialCompress(spol)
   }
+  class(spol) <- "gmpoly"
   spol
 }
 
@@ -116,5 +117,6 @@ polynomialMul <- function(pol1, pol2){
   if(notCompressed){
     spol <- polynomialCompress(spol)
   }
+  class(spol) <- "gmpoly"
   spol
 }

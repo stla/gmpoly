@@ -37,5 +37,22 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
   }else{
     pol <- stringToPol(string)
   }
+  class(pol) <- "gmpoly"
   pol
+}
+
+#' @title Print a multivariate polynomial
+#' @description Print a multivariate polynomial of class \code{gmpoly}
+#'
+#' @param x a \code{\link{gmpoly}} object
+#' @param ... ignored
+#'
+#' @return No value, just prints the polynomial.
+#' @export
+print.gmpoly <- function(x, ...){
+  if(is.null(attr(x, "string"))){
+    print(polAsString(x))
+  }else{
+    print(attr(x, "string"))
+  }
 }

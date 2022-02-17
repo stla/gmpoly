@@ -50,5 +50,6 @@ stringToPol <- function(p){
   if(anyDuplicated(powerRanks)){
     pol <- polynomialCompress(pol)
   }
+  class(pol) <- "gmpoly"
   pol
 }
