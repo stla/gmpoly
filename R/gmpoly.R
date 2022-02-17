@@ -20,6 +20,14 @@
 #' @importFrom gmp is.bigq
 #'
 #' @examples library(gmpoly)
+#' gmpoly("5/2 x^(2,3) + 3 x^(1,1)")
+#' gmpoly("5/2 x^(2,3) - 3 x^(1,1)")
+#' gmpoly("-x^(1,2,3) + 4/7 x^(3,1,1)")
+#' library(gmp)
+#' gmpoly(
+#'   coeffs = as.bigq(c(5, 7), c(8, 9)), 
+#'   powers = rbind(c(1, 1, 1), c(2, 2, 2))
+#' )
 gmpoly <- function(string, coeffs = NULL, powers = NULL){
   if(missing(string) || is.null(string)){
     stopifnot(is.bigq(coeffs))
