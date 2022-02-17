@@ -22,11 +22,12 @@ Evaluates a \code{gmpoly} multivariate polynomial for given
 }
 \examples{
 library(gmpoly)
+library(gmp)
 pol <- gmpoly("5/2 x^(2,3) + 3 x^(1,1)")
 gmpolyEval(pol, as.bigq(c(1, 1)))
 x <- rbind(
-  as.bigq(c(1, 1)),
-  as.bigq(c(3, 4), c(4, 3))
+  t(as.bigq(c(1, 1))),
+  t(as.bigq(c(3, 4), c(4, 3)))
 )
 gmpolyEval(pol, x)
 }
