@@ -5,7 +5,7 @@ Version: 0.1.0.9000
 Date: 2022-02-17
 Author: Stéphane Laurent
 Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
-Description: Symbolic calculation and evaluation of the multivariate polynomials with rational coefficients.
+Description: Symbolic calculation (addition or multiplication) and evaluation of multivariate polynomials with rational coefficients.
 License: GPL-3
 Encoding: UTF-8
 Imports: gmp, purrr
