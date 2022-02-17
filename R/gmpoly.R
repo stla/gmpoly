@@ -7,7 +7,6 @@ zeroPol <- function(m){
     "m" = m
   )
   attr(pol, "powers") <- t(rep(0L, m))
-  attr(pol, "string") <- sprintf("0 x^(%s)", toString(rep("0", m)))
   attr(pol, "zero") <- TRUE
   class(pol) <- "gmpoly"
   pol
@@ -71,8 +70,6 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
     }
     if(anyDuplicated(exponents)){
       pol <- polynomialCompress(pol)
-    }else{
-      attr(pol, "string") <- polAsString(pol, t(powers))
     }
   }else{
     pol <- stringToPol(string)
@@ -93,11 +90,7 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
 #' @return No value, just prints the polynomial.
 #' @export
 print.gmpoly <- function(x, ...){
-  if(is.null(attr(x, "string"))){
-    print(polAsString(x))
-  }else{
-    print(attr(x, "string"))
-  }
+  print(polAsString(x, attr(x, "powers")))
 }
 
 

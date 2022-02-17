@@ -3,12 +3,12 @@ polAsString <- function(pol, powers = NULL){
   coeffs <- pol[["coeffs"]]
   exponents <- pol[["exponents"]]
   if(is.null(powers)){
-    powers <- vapply(exponents, function(e){
+    powers <- t(vapply(exponents, function(e){
       grlexUnrank(m, e)
-    }, integer(m))
+    }, integer(m)))
   }
   if(m != 1L){
-    powers <- apply(powers, 2L, paste0, collapse = ",")    
+    powers <- apply(powers, 1L, paste0, collapse = ",")    
   }
   terms <- paste0(coeffs, " x^(", powers, ")")
   s <- paste0(terms, collapse = " + ")
