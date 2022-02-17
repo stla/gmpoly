@@ -4,6 +4,7 @@ pol <- gmpoly("4 x^(2, 1, 1) + 1/2 x^(0,1,0)")
 +pol
 -pol
 2 * pol
+pol / 2
 pol + 5
 pol - 5
 pol^2

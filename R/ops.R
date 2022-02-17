@@ -11,8 +11,21 @@
 #' @export
 #'
 #' @examples library(gmpoly)
+#' pol <- gmpoly("4 x^(2, 1, 1) + 1/2 x^(0,1,0)")
+#' +pol
+#' -pol
+#' 2 * pol
+#' pol / 2
+#' pol + 5
+#' pol - 5
+#' pol^2
+#' pol1 <- gmpoly("2 x^(1,1) - 5/3 x^(0,1)")
+#' pol2 <- gmpoly("-2 x^(1,1) + 3 x^(2,1)")
+#' pol1 + pol2
+#' pol1 * pol2
+#' pol1 == pol2
+#' pol1 != pol2
 Ops.gmpoly <- function(e1, e2 = NULL) {
-  oddfunc <- function(...){stop("odd---neither argument has class mvp?")}
   unary <- nargs() == 1L
   lclass <- nchar(.Method[1L]) > 0L
   rclass <- !unary && (nchar(.Method[2L]) > 0L)
@@ -43,6 +56,9 @@ Ops.gmpoly <- function(e1, e2 = NULL) {
     }
   }else if(.Generic == "+"){
     if(lclass && rclass){
+      if(gmpoly_eq_gmpoly(e1, gmpoly_negate(e2))){
+        return(zeroPol(e1[["m"]]))
+      }
       return(polynomialAdd(e1, e2))
     }else if(lclass){
       return(gmpoly_plus_scalar(e1, e2))
@@ -53,6 +69,9 @@ Ops.gmpoly <- function(e1, e2 = NULL) {
     }
   }else if(.Generic == "-"){
     if(lclass && rclass){
+      if(gmpoly_eq_gmpoly(e1, e2)){
+        return(zeroPol(e1[["m"]]))
+      }
       return(polynomialAdd(e1, gmpoly_negate(e2)))
     }else if(lclass){
       return(gmpoly_plus_scalar(e1, -e2))
