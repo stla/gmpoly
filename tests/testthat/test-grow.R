@@ -1,6 +1,6 @@
 library(gmp)
 
-testthat("Growing preserves the sorting", {
+test_that("Growing preserves the sorting", {
   set.seed(666L)
   pol <- gmpoly(
     coeffs = as.bigq(rep(1L, 50L)),
