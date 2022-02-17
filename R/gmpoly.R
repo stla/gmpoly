@@ -1,3 +1,22 @@
+#' @importFrom gmp as.bigq
+#' @noRd
+zeroPol <- function(m){
+  pol <- list(
+    "coeffs" = as.bigq(0L),
+    "exponents" = 1L,
+    "m" = m
+  )
+  attr(pol, "powers") <- t(rep(0L, m))
+  attr(pol, "string") <- sprintf("0 x^(%s)", toString(rep("0", m)))
+  attr(pol, "zero") <- TRUE
+  class(pol) <- "gmpoly"
+  pol
+}
+
+isZeroPol <- function(pol){
+  isTRUE(attr(pol, "zero"))
+}
+
 #' @title Define a multivariate polynomial
 #' @description Define a multivariate polynomial from a string or from its 
 #'   coefficients and powers. 
@@ -33,17 +52,32 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
     stopifnot(is.bigq(coeffs))
     stopifnot(is.matrix(powers))
     stopifnot(length(coeffs) == nrow(powers))
+    m <- ncol(powers)
+    if(all(coeffs == 0L)){
+      return(zeroPol(m))
+    }
     storage.mode(powers) <- "integer"
     exponents <- apply(powers, 1L, grlexRank)
-    m <- ncol(powers)
     pol <- list(
       "coeffs" = coeffs,
       "exponents" = exponents,
       "m" = m
     )
-    attr(pol, "string") <- polAsString(pol, t(powers))
+    attr(pol, "powers") <- powers
+    if(is.unsorted(exponents)){
+      pol <- polynomialSort(pol)
+      powers <- attr(pol, "powers")
+    }
+    if(anyDuplicated(exponents)){
+      pol <- polynomialCompress(pol)
+    }else{
+      attr(pol, "string") <- polAsString(pol, t(powers))
+    }
   }else{
     pol <- stringToPol(string)
+    if(all(pol[["coeffs"]] == 0L)){
+      return(zeroPol(pol[["m"]]))
+    }
   }
   class(pol) <- "gmpoly"
   pol

@@ -54,29 +54,32 @@ Ops.gmpoly <- function(e1, e2 = NULL) {
     }else{
       stop("Generic '^' not implemented in this case.")
     }
-  } else if (.Generic == "==") {
+  } else if(.Generic == "==") {
     if(lclass && rclass){
-      return(mvp_eq_mvp(e1,e2))
-    } else {
-      stop("Generic '==' only compares two mvp objects with one another")
+      return(gmpoly_eq_gmpoly(e1, e2))
+    }else{
+      stop("Generic '==' only compares two `gmpoly` objects with one another.")
     }
-  } else if (.Generic == "!=") {
+  }else if(.Generic == "!=") {
     if(lclass && rclass){
-      return(!mvp_eq_mvp(e1,e2))
-    } else {
-      stop("Generic '==' only compares two mvp objects with one another")
+      return(!gmpoly_eq_gmpoly(e1, e2))
+    }else{
+      stop("Generic '!=' only compares two `gmpoly` objects with one another.")
     }
-  } else if (.Generic == "/") {
+  }else if(.Generic == "/"){
     if(lclass && !rclass){
-      return(mvp_times_scalar(e1,1/e2))
-    } else {
-      stop("don't use '/', use ooom() instead")
+      if(e2 == 0){
+        stop("Division by zero.")
+      }
+      return(gmpoly_times_scalar(e1, 1/e2))
+    }else{
+      stop("Generic '/' is only used to divide a `gmpoly` by a scalar.")
     }
   }
 }
 
 gmpoly_negate <- function(pol){
-  if(is.zero(pol)){
+  if(isZeroPol(pol)){
     pol
   }else{
     pol[["coeffs"]] <- -pol[["coeffs"]]
@@ -85,6 +88,12 @@ gmpoly_negate <- function(pol){
 }
 
 gmpoly_times_scalar <- function(pol, lambda){
+  if(lambda == 0){
+    return(zeroPol(pol[["m"]]))
+  }
+  if(isZeroPol(pol)){
+    return(pol)
+  }
   pol[["coeffs"]] <- lambda * pol[["coeffs"]]
   pol
 }
@@ -109,17 +118,15 @@ gmpoly_plus_scalar <- function(pol, x){
 }
 
 gmpoly_power <- function(pol, n){
-  stopifnot(n==round(n))
-  if(n<0){
-    stop("negative powers not implemented")
-  }else if(n==0){
-    m <- pol[["m"]]
-    gmpoly(sprintf("x^(%s)", toString(rep("0", m))))
+  stopifnot(isPositiveInteger(n))
+  if(n == 0){
+    gmpoly(sprintf("x^(%s)", toString(rep("0", pol[["m"]]))))
   }else{
     Reduce(polynomialMul, rep(list(pol), n))
   }
 }
 
-`mvp_eq_mvp` <- function(S1,S2){
-  is.zero(S1-S2)  # nontrivial; S1 and S2 might have different orders
+gmpoly_eq_gmpoly <- function(pol1, pol2){
+  pol1[["m"]] == pol2[["m"]] && all(pol1[["coeffs"]] == pol2[["coeffs"]]) &&
+    all(pol1[["exponents"]] == pol2[["exponents"]])
 }

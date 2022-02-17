@@ -62,13 +62,27 @@ polynomialCompress <- function(pol){
 
 
 polynomialAdd <- function(pol1, pol2){
+  m <- pol1[["m"]]
+  if(m != pol2[["m"]]){
+    stop(
+      "Adding polynomials is possible only if the number of variables is the ",
+      "same for the two polynomials.",
+      call. = TRUE
+    )
+  }
+  if(isZeroPol(pol1)){
+    return(pol2)
+  }
+  if(isZeroPol(pol2)){
+    return(pol1)
+  }
   coeffs <- c(pol1[["coeffs"]], pol2[["coeffs"]])
   exponents <- c(pol1[["exponents"]], pol2[["exponents"]])
   powers <- rbind(attr(pol1, "powers"), attr(pol2, "powers"))
   pol <- list(
     "coeffs" = coeffs,
     "exponents" = exponents,
-    "m" = pol1[["m"]]
+    "m" = m
   )
   attr(pol, "powers") <- powers
   spol <- polynomialSort(pol)
@@ -83,6 +97,16 @@ polynomialAdd <- function(pol1, pol2){
 
 polynomialMul <- function(pol1, pol2){
   m <- pol1[["m"]]
+  if(m != pol2[["m"]]){
+    stop(
+      "Multiplying polynomials is possible only if the number of variables is ",
+      "the same for the two polynomials.",
+      call. = TRUE
+    )
+  }
+  if(isZeroPol(pol1) || isZeroPol(pol2)){
+    return(zeroPol(m))
+  }
   coeffs1 <- pol1[["coeffs"]]
   coeffs2 <- pol2[["coeffs"]]
   o1 <- length(coeffs1)
