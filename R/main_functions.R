@@ -116,6 +116,16 @@ polynomialMul <- function(pol1, pol2){
   exponents2 <- pol2[["exponents"]]
   powers1 <- attr(pol1, "powers")
   powers2 <- attr(pol2, "powers")
+  if(is.null(powers1)){
+    powers1 <- t(vapply(exponents1, function(e){
+      grlexUnrank(m, e)
+    }, integer(m)))
+  }
+  if(is.null(powers2)){
+    powers2 <- t(vapply(exponents2, function(e){
+      grlexUnrank(m, e)
+    }, integer(m)))
+  }
   coeffs <- c(gmp::outer(coeffs1, coeffs2))
   nterms <- o1 * o2
   exponents <- integer(nterms)
