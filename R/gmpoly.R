@@ -99,3 +99,35 @@ print.gmpoly <- function(x, ...){
     print(attr(x, "string"))
   }
 }
+
+
+#' @title Conversion to 'mvp' polynomial
+#' @description Convert a \code{\link{gmpoly}} polynomial to a 
+#'   \code{\link[mvp:mvp-package]{mvp}} polynomial.
+#'
+#' @param pol a \code{\link{gmpoly}} object
+#'
+#' @return A \code{\link[mvp:mvp-package]{mvp}} object.
+#' @export
+#' 
+#' @importFrom gmp asNumeric
+#' @importFrom mvp mvp
+#'
+#' @examples library(gmpoly)
+#' pol <- gmpoly("5/2 x^(2,2,3) + 3 x^(1,0,1)")
+#' gmpoly2mvp(pol)
+gmpoly2mvp <- function(pol){
+  m <- pol[["m"]]
+  powers <- attr(pol, "powers")
+  if(is.null(powers)){
+    powers <- t(vapply(pol[["exponents"]], function(e){
+      grlexUnrank(m, e)
+    }, integer(m)))
+  }
+  nterms <- nrow(powers)
+  mvp(
+    vars = rep(list(paste0("x", 1L:m)), nterms),
+    powers = split(powers, 1L:nterms),
+    coeffs = asNumeric(pol[["coeffs"]])
+  )
+}
