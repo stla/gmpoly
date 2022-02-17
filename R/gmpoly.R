@@ -41,7 +41,7 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
       "exponents" = exponents,
       "m" = m
     )
-    attr(pol, "string") <- polAsString(pol, drop(t(powers)))
+    attr(pol, "string") <- polAsString(pol, t(powers))
   }else{
     pol <- stringToPol(string)
   }
