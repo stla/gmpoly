@@ -13,7 +13,8 @@ polAsString <- function(pol, powers = NULL){
   terms <- paste0(coeffs, " x^(", powers, ")")
   s <- paste0(terms, collapse = " + ")
   s <- gsub("+ -", "- ", s, fixed = TRUE)
-  gsub(" 1 x", " x", s, fixed = TRUE)
+  s <- gsub(" 1 x", " x", s, fixed = TRUE)
+  sub("^1 ", "", s)
 }
 
 #' @importFrom purrr transpose

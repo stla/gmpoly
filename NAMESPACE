@@ -3,6 +3,7 @@
 S3method(Ops,gmpoly)
 S3method(print,gmpoly)
 export(gmpoly)
+export(gmpolyConstant)
 export(gmpolyEval)
 export(gmpolyGrow)
 importFrom(gmp,NA_bigq_)
