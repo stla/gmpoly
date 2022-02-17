@@ -1,3 +1,16 @@
+#' @title Arithmetic operators for multivariate polynomials
+#'
+#' @param e1,e2 for an unary operator, only \code{e1} must be given, a 
+#'   \code{\link{gmpoly}} object; for a binary operator, at least one of 
+#'   \code{e1} and \code{e2} must be a \code{\link{gmpoly}} object, and the 
+#'   other must a \code{\link{gmpoly}} object as well or a scalar; the power
+#'   operator (\code{^}) is an exception: one can only raise a 
+#'   \code{\link{gmpoly}} object to a positive integer power
+#'
+#' @return A \code{\link{gmpoly}} object.
+#' @export
+#'
+#' @examples library(gmpoly)
 Ops.gmpoly <- function(e1, e2 = NULL) {
   oddfunc <- function(...){stop("odd---neither argument has class mvp?")}
   unary <- nargs() == 1L
@@ -60,7 +73,7 @@ Ops.gmpoly <- function(e1, e2 = NULL) {
     }else{
       stop("Generic '==' only compares two `gmpoly` objects with one another.")
     }
-  }else if(.Generic == "!=") {
+  }else if(.Generic == "!="){
     if(lclass && rclass){
       return(!gmpoly_eq_gmpoly(e1, e2))
     }else{
@@ -91,7 +104,7 @@ gmpoly_times_scalar <- function(pol, lambda){
   if(lambda == 0){
     return(zeroPol(pol[["m"]]))
   }
-  if(isZeroPol(pol)){
+  if(lambda == 1 || isZeroPol(pol)){
     return(pol)
   }
   pol[["coeffs"]] <- lambda * pol[["coeffs"]]
@@ -112,9 +125,15 @@ gmpoly_times_scalar <- function(pol, lambda){
 #   }
 # }
 
+#' @importFrom gmp as.bigq
+#' @noRd
 gmpoly_plus_scalar <- function(pol, x){
-  pol[["coeffs"]] <- pol[["coeffs"]] + x
-  pol
+  if(x == 0){
+    return(pol)
+  }
+  m <- pol[["m"]]
+  scalarPol <- gmpoly(coeffs = as.bigq(x), powers = rbind(rep(0L, m)))
+  polynomialAdd(pol, scalarPol)
 }
 
 gmpoly_power <- function(pol, n){

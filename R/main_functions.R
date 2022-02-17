@@ -94,7 +94,8 @@ polynomialAdd <- function(pol1, pol2){
   spol
 }
 
-
+#' @importFrom gmp outer
+#' @noRd
 polynomialMul <- function(pol1, pol2){
   m <- pol1[["m"]]
   if(m != pol2[["m"]]){
@@ -115,7 +116,7 @@ polynomialMul <- function(pol1, pol2){
   exponents2 <- pol2[["exponents"]]
   powers1 <- attr(pol1, "powers")
   powers2 <- attr(pol2, "powers")
-  coeffs <- c(outer(coeffs1, coeffs2))
+  coeffs <- c(gmp::outer(coeffs1, coeffs2))
   nterms <- o1 * o2
   exponents <- integer(nterms)
   powers <- matrix(NA_integer_, nrow = nterms, ncol = m)
