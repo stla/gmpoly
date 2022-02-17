@@ -20,8 +20,8 @@ polAsString <- function(pol, powers = NULL){
 #' @importFrom gmp as.bigq
 #' @noRd
 stringToPol <- function(p){
-  p <- gsub("\\)\\s*?-", ")+-", p)#, perl = TRUE)
-  p <- gsub("^-\\s*?x", "-1 x", trimws(p, "left"))
+  p <- gsub("\\)\\s*-\\s*(\\d*/*\\d*)\\s*", ")+-\\1", p)#, perl = TRUE)
+  p <- gsub("^-\\s*x", "-1x", trimws(p, "left"))
   terms <- strsplit(p, "+", fixed = TRUE)[[1L]]
   csts <- !grepl("x", terms)
   terms[csts] <- paste0(terms[csts], "x^(0")
