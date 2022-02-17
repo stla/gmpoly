@@ -16,13 +16,16 @@ polAsString <- function(pol, powers = NULL){
   gsub(" 1 x", " x", s, fixed = TRUE)
 }
 
+#' @importFrom purrr transpose
+#' @importFrom gmp as.bigq
+#' @noRd
 stringToPol <- function(p){
   p <- gsub("\\)\\s*?-", ")+-", p)#, perl = TRUE)
   p <- gsub("^-\\s*?x", "-1 x", trimws(p, "left"))
   terms <- strsplit(p, "+", fixed = TRUE)[[1L]]
   csts <- !grepl("x", terms)
   terms[csts] <- paste0(terms[csts], "x^(0")
-  ss <- purrr::transpose(strsplit(terms, "x^(", fixed = TRUE))#, .names = c("coeff", "power"))
+  ss <- transpose(strsplit(terms, "x^(", fixed = TRUE))#, .names = c("coeff", "power"))
   coeffs <- as.bigq(unlist(ss[[1L]], recursive = FALSE))
   coeffs[is.na(coeffs)] <- as.bigq(1L)
   powers <- sub(")", "", unlist(ss[[2L]], recursive = FALSE), fixed = TRUE)
@@ -49,4 +52,3 @@ stringToPol <- function(p){
   }
   pol
 }
-

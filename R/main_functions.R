@@ -2,17 +2,17 @@ polynomialSort <- function(pol){
   exponents <- pol[["exponents"]]
   idx <- order(exponents)
   spol <- list(
-    coeffs = pol[["coeffs"]][idx],
-    exponents = exponents[idx],
-    m = pol[["m"]]
+    "coeffs" = pol[["coeffs"]][idx],
+    "exponents" = exponents[idx],
+    "m" = pol[["m"]]
   )
   attr(spol, "powers") <- attr(pol, "powers")[idx, , drop = FALSE]
   spol
 }
 
 
-library(gmp)
-
+#' @importFrom gmp NA_bigq_
+#' @noRd
 polynomialCompress <- function(pol){
   coeffs <- pol[["coeffs"]]
   # zeros <- coeffs == 0L
@@ -42,11 +42,8 @@ polynomialCompress <- function(pol){
       }
     }
   }
-  
   o2 <- put
-  
   get <- put <- 1L
-  
   while(get <= o2){
     if(coeffs2[get] != 0L){
       coeffs2[put] <- coeffs2[get]
@@ -57,9 +54,9 @@ polynomialCompress <- function(pol){
   }
   o2 <- put - 1L
   list(
-    coeffs = coeffs2[1L:o2],
-    exponents = exponents2[1L:o2],
-    m = pol[["m"]]
+    "coeffs" = coeffs2[1L:o2],
+    "exponents" = exponents2[1L:o2],
+    "m" = pol[["m"]]
   )
 }
 
@@ -69,9 +66,9 @@ polynomialAdd <- function(pol1, pol2){
   exponents <- c(pol1[["exponents"]], pol2[["exponents"]])
   powers <- rbind(attr(pol1, "powers"), attr(pol2, "powers"))
   pol <- list(
-    coeffs = coeffs,
-    exponents = exponents,
-    m = pol1[["m"]]
+    "coeffs" = coeffs,
+    "exponents" = exponents,
+    "m" = pol1[["m"]]
   )
   attr(pol, "powers") <- powers
   spol <- polynomialSort(pol)
@@ -81,6 +78,7 @@ polynomialAdd <- function(pol1, pol2){
   }
   spol
 }
+
 
 polynomialMul <- function(pol1, pol2){
   m <- pol1[["m"]]
@@ -108,9 +106,9 @@ polynomialMul <- function(pol1, pol2){
     }
   }
   pol <- list(
-    coeffs = coeffs,
-    exponents = exponents,
-    m = m
+    "coeffs" = coeffs,
+    "exponents" = exponents,
+    "m" = m
   )
   attr(pol, "powers") <- powers
   spol <- polynomialSort(pol)

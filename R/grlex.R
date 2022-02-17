@@ -10,7 +10,6 @@ grlexRank <- function(a){
     xs[i-1L] <- xs[i-2L] + a[i-1L] + 1L
   }
   rank <- 1L
-  
   for(i in seq_len(ks)){
     if(i == 1L){
       tim1 <- 0L
@@ -18,18 +17,15 @@ grlexRank <- function(a){
     else{
       tim1 <- xs[i-1L]
     }
-    
     if(tim1 + 1L <= xs[i] - 1L){
       for(j in (tim1 + 1L):(xs[i] - 1L)){
         rank <- rank + as.integer(choose(ns - j, ks - i))
       }
     }
   }
-  
   for(n in seq_len(nm)-1L){
     rank <- rank + as.integer(choose(n + m - 1L, n))
   }
-  
   rank
 }
 
@@ -50,15 +46,11 @@ grlexUnrank <- function(m, rank){
     }
     rank1 <- rank1 + r
   }
-  
   rank2 <- rank - rank1
-  
   ks <- m - 1L
   ns <- nm + m - 1L
   xs <- integer(ks)
-  
   j <- 1L
-  
   for(i in seq_len(ks)){
     r <- as.integer(choose(ns - j, ks - i))
     
@@ -70,13 +62,11 @@ grlexUnrank <- function(m, rank){
     xs[i] <- j
     j <- j + 1L
   }
-  
   a <- integer(m)
   a[1L] <- xs[1L] - 1L
   for(i in seq_len(m)[-c(1L, 2L)]){
     a[i - 1L] <- xs[i - 1L] - xs[i - 2L] - 1L
   }
   a[m] <- ns - xs[ks]
-  
   a
 }
