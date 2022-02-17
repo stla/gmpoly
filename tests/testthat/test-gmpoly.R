@@ -19,4 +19,8 @@ test_that("Two polynomials", {
   pol2 <- gmpoly("-2 x^(1,1) + 3 x^(2,1)")
   expect_true(pol1 + pol2 == gmpoly("-5/3 x^(0,1) + 3 x^(2,1)"))
   expect_true(pol1 * pol2 == gmpoly("10/3 x^(1,2) - 9 x^(2,2) + 6 x^(3,2)"))
+  pol1mvp <- gmpoly2mvp(pol1)
+  pol2mvp <- gmpoly2mvp(pol2)
+  expect_true(gmpoly2mvp(pol1 + pol2) == pol1mvp + pol2mvp)
+  expect_true(gmpoly2mvp(pol1 * pol2) == pol1mvp * pol2mvp)
 })
