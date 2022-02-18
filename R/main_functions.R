@@ -90,7 +90,7 @@ polynomialAdd <- function(pol1, pol2){
   )
   attr(pol, "powers") <- powers
   spol <- polynomialSort(pol)
-  notCompressed <- anyDuplicated(exponents)
+  notCompressed <- anyDuplicated(exponents) || any(coeffs == 0)
   if(notCompressed){
     spol <- polynomialCompress(spol)
   }
@@ -152,7 +152,7 @@ polynomialMul <- function(pol1, pol2){
   )
   attr(pol, "powers") <- powers
   spol <- polynomialSort(pol)
-  notCompressed <- anyDuplicated(exponents)
+  notCompressed <- anyDuplicated(exponents) || any(coeffs == 0)
   if(notCompressed){
     spol <- polynomialCompress(spol)
   }
