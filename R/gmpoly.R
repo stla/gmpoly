@@ -90,7 +90,9 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
 #' @return No value, just prints the polynomial.
 #' @export
 print.gmpoly <- function(x, ...){
-  print(polAsString(x, attr(x, "powers")))
+  cat("gmpoly object algebraically equal to\n")
+  cat(polAsString(x, attr(x, "powers")))
+  cat("\n")
 }
 
 

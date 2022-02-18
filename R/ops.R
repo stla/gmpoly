@@ -27,8 +27,8 @@
 #' pol1 != pol2
 Ops.gmpoly <- function(e1, e2 = NULL) {
   unary <- nargs() == 1L
-  lclass <- nchar(.Method[1L]) > 0L
-  rclass <- !unary && (nchar(.Method[2L]) > 0L)
+  lclass <- .Method[1L] == "Ops.gmpoly" 
+  rclass <- !unary && (.Method[2L] == "Ops.gmpoly")
   
   if(unary){
     if(.Generic == "+"){

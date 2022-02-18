@@ -78,7 +78,11 @@ polynomialAdd <- function(pol1, pol2){
   }
   coeffs <- c(pol1[["coeffs"]], pol2[["coeffs"]])
   exponents <- c(pol1[["exponents"]], pol2[["exponents"]])
-  powers <- rbind(attr(pol1, "powers"), attr(pol2, "powers"))
+  powers1 <- attr(pol1, "powers")
+  powers2 <- attr(pol2, "powers")
+  powers <- if(!is.null(powers1) && !is.null(powers2)){
+    rbind(powers1, powers2)
+  }
   pol <- list(
     "coeffs" = coeffs,
     "exponents" = exponents,

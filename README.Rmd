@@ -35,7 +35,16 @@ pol - 5
 pol^2
 ```
 
-Two polynomials can be added and multiplied:
+Note that you cannot directly use a `bigq` scalar, e.g. you can't do 
+`gmp::as.bigq(5, 3) * pol`. To perform such an operation, you have to use 
+`gmpolyConstant`:
+
+```{r}
+gmpolyConstant(3, "5/3") * pol
+```
+
+The `gmpolyConstant` function converts a scalar to a constant polynomial, and 
+two polynomials can be added and multiplied:
 
 ```{r}
 pol1 <- gmpoly("2 x^(1,1) - 5/3 x^(0,1)")
