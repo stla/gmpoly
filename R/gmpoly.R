@@ -121,7 +121,7 @@ gmpoly2mvp <- function(pol){
   }
   nterms <- nrow(powers)
   mvp(
-    vars = rep(list(paste0("x", 1L:m)), nterms),
+    vars = rep(list(paste0("x_", 1L:m)), nterms),
     powers = split(powers, 1L:nterms),
     coeffs = asNumeric(pol[["coeffs"]])
   )
