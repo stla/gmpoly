@@ -1,8 +1,8 @@
 Package: gmpoly
 Type: Package
 Title: Multivariate Polynomials with Rational Coefficients
-Version: 0.1.0.9000
-Date: 2022-02-17
+Version: 1.0.0
+Date: 2022-02-18
 Author: Stéphane Laurent
 Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
 Description: Symbolic calculation (addition or multiplication) and evaluation of multivariate polynomials with rational coefficients.
