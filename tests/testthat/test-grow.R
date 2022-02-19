@@ -7,5 +7,5 @@ test_that("Growing preserves the sorting", {
     powers = matrix(rpois(50L*3L, 8), nrow = 50L, ncol = 3L)
   )
   gpol <- gmpolyGrow(pol)
-  expect_identical(lexsort(gpol[["powers"]]), gpol[["powers"]])
+  expect_identical(polynomialSort(gpol), unclass(gpol))
 })
