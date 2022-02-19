@@ -53,7 +53,7 @@ polynomialCompress <- function(pol){
   o2 <- put - 1L
   list(
     "coeffs" = coeffs2[1L:o2],
-    "powers" = powers2[1L:o2, ],
+    "powers" = powers2[1L:o2, , drop = FALSE],
     "m" = pol[["m"]]
   )
 }
@@ -109,8 +109,6 @@ polynomialMul <- function(pol1, pol2){
   coeffs2 <- pol2[["coeffs"]]
   o1 <- length(coeffs1)
   o2 <- length(coeffs2)
-  exponents1 <- pol1[["exponents"]]
-  exponents2 <- pol2[["exponents"]]
   powers1 <- pol1[["powers"]]
   powers2 <- pol2[["powers"]]
   coeffs <- c(gmp::outer(coeffs1, coeffs2))
