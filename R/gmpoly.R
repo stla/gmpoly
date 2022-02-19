@@ -65,6 +65,7 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
       pol <- polynomialCompress(pol)
     }
   }else{
+    stopifnot(isString(string))
     pol <- stringToPol(string)
     if(all(pol[["coeffs"]] == 0L)){
       return(zeroPol(pol[["m"]]))
