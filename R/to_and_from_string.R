@@ -1,12 +1,6 @@
-polAsString <- function(pol, powers = NULL){
+polAsString <- function(pol, powers){
   m <- pol[["m"]]
   coeffs <- pol[["coeffs"]]
-  exponents <- pol[["exponents"]]
-  if(is.null(powers)){
-    powers <- t(vapply(exponents, function(e){
-      grlexUnrank(m, e)
-    }, integer(m)))
-  }
   if(m != 1L){
     powers <- apply(powers, 1L, paste0, collapse = ",")    
   }
@@ -44,17 +38,12 @@ stringToPol <- function(p){
     i <- i + 1L
     m <- length(powers[[i]])
   }
-  powerRanks <- vapply(powers, grlexRank, integer(1L))
-  pol <- list(
+  pol <- polynomialSort(list(
     "coeffs" = coeffs, 
-    "exponents" = powerRanks,
+    "powers" = do.call(rbind, powers),
     "m" = m
-  )
-  attr(pol, "powers") <- do.call(rbind, powers)
-  if(is.unsorted(powerRanks)){
-    pol <- polynomialSort(pol)
-  }
-  if(anyDuplicated(powerRanks)){
+  ))
+  if(anyDuplicated(powers) || any(coeffs == 0)){
     pol <- polynomialCompress(pol)
   }
   if(all(pol[["coeffs"]] == 0L)){

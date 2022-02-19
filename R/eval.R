@@ -37,14 +37,7 @@ gmpolyEval <- function(pol, x){
       )
     }
   }
-  powers <- attr(pol, "powers")
-  if(is.null(powers)){
-    powers <- vapply(pol[["exponents"]], function(e){
-      grlexUnrank(nvariables, e)
-    }, integer(nvariables))
-  }else{
-    powers <- t(powers)
-  }
+  powers <- t(pol[["powers"]])
   nresults <- nrow(x)
   results <- rep(NA_bigq_, nresults)
   coeffs <- pol[["coeffs"]]

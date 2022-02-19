@@ -3,10 +3,9 @@
 zeroPol <- function(m){
   pol <- list(
     "coeffs" = as.bigq(0L),
-    "exponents" = 1L,
+    "powers" = t(rep(0L, m)),
     "m" = m
   )
-  attr(pol, "powers") <- t(rep(0L, m))
   attr(pol, "zero") <- TRUE
   class(pol) <- "gmpoly"
   pol
@@ -57,18 +56,12 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
     }
     storage.mode(powers) <- "integer"
     stopifnot(all(powers >= 0L))
-    exponents <- apply(powers, 1L, grlexRank)
-    pol <- list(
+    pol <- polynomialSort(list(
       "coeffs" = coeffs,
-      "exponents" = exponents,
+      "powers" = powers,
       "m" = m
-    )
-    attr(pol, "powers") <- powers
-    if(is.unsorted(exponents)){
-      pol <- polynomialSort(pol)
-      powers <- attr(pol, "powers")
-    }
-    if(anyDuplicated(exponents)){
+    ))
+    if(anyDuplicated(powers) || any(coeffs == 0)){
       pol <- polynomialCompress(pol)
     }
   }else{
@@ -91,7 +84,7 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
 #' @export
 print.gmpoly <- function(x, ...){
   cat("gmpoly object algebraically equal to\n")
-  cat(polAsString(x, attr(x, "powers")))
+  cat(polAsString(x, x[["powers"]]))
   cat("\n")
 }
 
@@ -113,16 +106,11 @@ print.gmpoly <- function(x, ...){
 #' gmpoly2mvp(pol)
 gmpoly2mvp <- function(pol){
   m <- pol[["m"]]
-  powers <- attr(pol, "powers")
-  if(is.null(powers)){
-    powers <- t(vapply(pol[["exponents"]], function(e){
-      grlexUnrank(m, e)
-    }, integer(m)))
-  }
+  powers <- pol[["powers"]]
   nterms <- nrow(powers)
   mvp(
     vars = rep(list(paste0("x_", 1L:m)), nterms),
-    powers = split(powers, 1L:nterms),
+    powers = lapply(seq_len(nterms), function(i) powers[i, ]),
     coeffs = asNumeric(pol[["coeffs"]])
   )
 }
