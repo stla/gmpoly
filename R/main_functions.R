@@ -3,8 +3,7 @@ polynomialSort <- function(pol){
   idx <- lexorder(powers)
   list(
     "coeffs" = pol[["coeffs"]][idx],
-    "powers" = powers[idx, , drop = FALSE],
-    "m" = pol[["m"]]
+    "powers" = powers[idx, , drop = FALSE]
   )
 }
 
@@ -21,7 +20,7 @@ polynomialCompress <- function(pol){
   powers <- pol[["powers"]]
   # }
   o1 <- o2 <- nrow(powers)
-  powers2 <- matrix(NA_integer_, nrow = o2, ncol = pol[["m"]])
+  powers2 <- matrix(NA_integer_, nrow = o2, ncol = ncol(powers))
   coeffs2 <- rep(NA_bigq_, o2)
   get <- put <- 0L
   while(get < o1){
@@ -53,15 +52,15 @@ polynomialCompress <- function(pol){
   o2 <- put - 1L
   list(
     "coeffs" = coeffs2[1L:o2],
-    "powers" = powers2[1L:o2, , drop = FALSE],
-    "m" = pol[["m"]]
+    "powers" = powers2[1L:o2, , drop = FALSE]
   )
 }
 
 
 polynomialAdd <- function(pol1, pol2){
-  m <- pol1[["m"]]
-  if(m != pol2[["m"]]){
+  powers1 <- pol1[["powers"]]
+  powers2 <- pol2[["powers"]]
+  if(ncol(powers1) != ncol(powers2)){
     stop(
       "Adding polynomials is possible only if the number of variables is the ",
       "same for the two polynomials.",
@@ -75,13 +74,10 @@ polynomialAdd <- function(pol1, pol2){
     return(pol1)
   }
   coeffs <- c(pol1[["coeffs"]], pol2[["coeffs"]])
-  powers1 <- attr(pol1, "powers")
-  powers2 <- attr(pol2, "powers")
-  powers <- rbind(pol1[["powers"]], pol2[["powers"]])
+  powers <- rbind(powers1, powers2)
   pol <- polynomialSort(list(
     "coeffs" = coeffs,
-    "powers" = powers,
-    "m" = m
+    "powers" = powers
   ))
   notCompressed <- anyDuplicated(powers) || any(coeffs == 0)
   if(notCompressed){
@@ -94,8 +90,10 @@ polynomialAdd <- function(pol1, pol2){
 #' @importFrom gmp outer
 #' @noRd
 polynomialMul <- function(pol1, pol2){
-  m <- pol1[["m"]]
-  if(m != pol2[["m"]]){
+  powers1 <- pol1[["powers"]]
+  powers2 <- pol2[["powers"]]
+  m <- ncol(powers1)
+  if(m != ncol(powers2)){
     stop(
       "Multiplying polynomials is possible only if the number of variables is ",
       "the same for the two polynomials.",
@@ -109,8 +107,6 @@ polynomialMul <- function(pol1, pol2){
   coeffs2 <- pol2[["coeffs"]]
   o1 <- length(coeffs1)
   o2 <- length(coeffs2)
-  powers1 <- pol1[["powers"]]
-  powers2 <- pol2[["powers"]]
   coeffs <- c(gmp::outer(coeffs1, coeffs2))
   nterms <- o1 * o2
   powers <- matrix(NA_integer_, nrow = nterms, ncol = m)
@@ -123,8 +119,7 @@ polynomialMul <- function(pol1, pol2){
   }
   pol <- polynomialSort(list(
     "coeffs" = coeffs,
-    "powers" = powers,
-    "m" = m
+    "powers" = powers
   ))
   notCompressed <- anyDuplicated(powers) || any(coeffs == 0)
   if(notCompressed){

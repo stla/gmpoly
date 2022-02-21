@@ -1,7 +1,6 @@
 polAsString <- function(pol, powers){
-  m <- pol[["m"]]
   coeffs <- pol[["coeffs"]]
-  if(m != 1L){
+  if(ncol(powers) != 1L){
     powers <- apply(powers, 1L, paste0, collapse = ",")    
   }
   terms <- paste0(coeffs, " x^(", powers, ")")
@@ -32,22 +31,22 @@ stringToPol <- function(p){
     stop("Negative powers are not allowed.")
   }
   i <- 1L
-  m <- length(powers[[1L]])
-  nterms <- length(powers)
-  while(m == 1L && i < nterms){
-    i <- i + 1L
-    m <- length(powers[[i]])
-  }
+  # m <- length(powers[[1L]])
+  # nterms <- length(powers)
+  # while(m == 1L && i < nterms){
+  #   i <- i + 1L
+  #   m <- length(powers[[i]])
+  # }
+  powers <- do.call(rbind, powers)
   pol <- polynomialSort(list(
     "coeffs" = coeffs, 
-    "powers" = do.call(rbind, powers),
-    "m" = m
+    "powers" = powers
   ))
   if(anyDuplicated(powers) || any(coeffs == 0)){
     pol <- polynomialCompress(pol)
   }
   if(all(pol[["coeffs"]] == 0L)){
-    return(zeroPol(m))
+    return(zeroPol(ncol(powers)))
   }
   class(pol) <- "gmpoly"
   pol

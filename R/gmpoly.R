@@ -3,8 +3,7 @@
 zeroPol <- function(m){
   pol <- list(
     "coeffs" = as.bigq(0L),
-    "powers" = t(rep(0L, m)),
-    "m" = m
+    "powers" = t(rep(0L, m))
   )
   attr(pol, "zero") <- TRUE
   class(pol) <- "gmpoly"
@@ -58,8 +57,7 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
     stopifnot(all(powers >= 0L))
     pol <- polynomialSort(list(
       "coeffs" = coeffs,
-      "powers" = powers,
-      "m" = m
+      "powers" = powers
     ))
     if(anyDuplicated(powers) || any(coeffs == 0)){
       pol <- polynomialCompress(pol)
@@ -68,7 +66,7 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
     stopifnot(isString(string))
     pol <- stringToPol(string)
     if(all(pol[["coeffs"]] == 0L)){
-      return(zeroPol(pol[["m"]]))
+      return(zeroPol(ncol(pol[["powers"]])))
     }
   }
   class(pol) <- "gmpoly"
@@ -76,7 +74,7 @@ gmpoly <- function(string, coeffs = NULL, powers = NULL){
 }
 
 #' @title Print a multivariate polynomial
-#' @description Print a multivariate polynomial of class \code{gmpoly}
+#' @description Print a multivariate polynomial of class \code{gmpoly}.
 #'
 #' @param x a \code{\link{gmpoly}} object
 #' @param ... ignored
@@ -106,11 +104,10 @@ print.gmpoly <- function(x, ...){
 #' pol <- gmpoly("5/2 x^(2,2,3) + 3 x^(1,0,1)")
 #' gmpoly2mvp(pol)
 gmpoly2mvp <- function(pol){
-  m <- pol[["m"]]
   powers <- pol[["powers"]]
   nterms <- nrow(powers)
   mvp(
-    vars = rep(list(paste0("x_", 1L:m)), nterms),
+    vars = rep(list(paste0("x_", 1L:ncol(powers))), nterms),
     powers = lapply(seq_len(nterms), function(i) powers[i, ]),
     coeffs = asNumeric(pol[["coeffs"]])
   )

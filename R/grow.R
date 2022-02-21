@@ -14,8 +14,7 @@ gmpolyGrow <- function(pol){
   stopifnot(inherits(pol, "gmpoly"))
   newpol <- list(
     "coeffs" = pol[["coeffs"]], 
-    "powers" = cbind(pol[["powers"]], 0L),
-    "m" = pol[["m"]] + 1L
+    "powers" = cbind(pol[["powers"]], 0L)
   )
   class(newpol) <- "gmpoly"
   newpol
