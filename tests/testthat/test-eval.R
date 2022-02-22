@@ -1,4 +1,4 @@
-library(gmp)
+library(gmp, warn.conflicts = FALSE)
 
 test_that("One evaluation", {
   pol <- gmpoly("5/2 x^(2,3) + 3 x^(1,1)")
